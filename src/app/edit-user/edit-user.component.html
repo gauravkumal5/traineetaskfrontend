@@ -1,0 +1,186 @@
+<div class="container">
+    <h4 class="text-success text-center">Edit Customer</h4>
+    <h3>{{isValidForm?'':'Form is invalid'}}</h3>
+    <div class="d-flex  justify-content-center" style="height:100vh">
+        <form [formGroup]="updateUserForm" (ngSubmit)='onUpdateUser()' style="width: 100%;" class="add-user-form">
+            <div class="form-group">
+                <label for="">First Name <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="text" class="form-control" aria-label="FirstName" aria-describedby="basic-addon1"
+                        formControlName="firstName" placeholder="Please enter your first name">
+                </div>
+                <span class="help-block"
+                    *ngIf="updateUserForm.get('firstName').touched  && !updateUserForm.get('firstName').valid  ">
+                    <span *ngIf="updateUserForm.get('firstName').errors['required']" class="text-danger">
+                        Required</span>
+                    <span *ngIf="updateUserForm.get('firstName').errors['pattern']" class="text-danger"> Must contain
+                        only
+                        letters</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="">Middle Name <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                        formControlName="middleName" placeholder="Please enter your middle name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="">Last Name<span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                        formControlName="lastName" placeholder="Please enter your last name">
+                </div>
+                <span class="help-block"
+                    *ngIf="updateUserForm.get('lastName').touched  && !updateUserForm.get('lastName').valid  ">
+                    <span *ngIf="updateUserForm.get('lastName').errors['required']" class="text-danger"> Required</span>
+                    <span *ngIf="updateUserForm.get('lastName').errors['pattern']" class="text-danger"> Must contain
+                        only
+                        letters</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="">Date Of Birth <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="date" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                        formControlName="dateOfBirth">
+                </div>
+                <span class="help-block"
+                    *ngIf="updateUserForm.get('dateOfBirth').touched  && !updateUserForm.get('dateOfBirth').valid  ">
+                    <span *ngIf="updateUserForm.get('dateOfBirth').errors['required']" class="text-danger">
+                        Required</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="">Gender <span class="text-danger">*</span></label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="flexRadioDefault1"
+                        formControlName="gender" value="male">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Male
+                    </label>
+                </div>
+                {{updateUserForm.controls['gender'].value}}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="flexRadioDefault2" checked
+                        formControlName="gender" value="female">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Female
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="">Status <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <select class="form-select" aria-label="Status" formControlName="status">
+                        <option selected>Select status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="">Citizenship No<span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                        formControlName="citizenshipNo">
+                </div>
+                <span class="help-block"
+                    *ngIf="updateUserForm.get('citizenshipNo').touched  && !updateUserForm.get('citizenshipNo').valid  ">
+                    <span *ngIf="updateUserForm.get('citizenshipNo').errors['required']" class="text-danger">
+                        Required</span>
+                    <span *ngIf="updateUserForm.get('citizenshipNo').errors['pattern']" class="text-danger"> Must
+                        contain
+                        only
+                        numbers and dash</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="">Address <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                        formControlName="address">
+                </div>
+                <span class="help-block"
+                    *ngIf="updateUserForm.get('address').touched  && !updateUserForm.get('address').valid  ">
+                    <span *ngIf="updateUserForm.get('address').errors['required']" class="text-danger">
+                        Required</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="">Marital Status<span class="text-danger">*</span></label>
+                <select class="form-select" aria-label="Marital Status" formControlName="maritalStatus">
+                    <option selected>Select relationship</option>
+                    <option value="married">Married</option>
+                    <option value="single">Single</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="">Email Address <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                        formControlName="emailAddress">
+                </div>
+                <span class="help-block"
+                    *ngIf="updateUserForm.get('emailAddress').touched  && !updateUserForm.get('emailAddress').valid  ">
+                    <span *ngIf="updateUserForm.get('emailAddress').errors['required']" class="text-danger">
+                        Required</span>
+                    <span *ngIf="updateUserForm.get('emailAddress').errors['email']" class="text-danger"> Must be in
+                        email
+                        format</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="">Mobile Number <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                        formControlName="mobileNumber">
+                </div>
+                <span class="help-block"
+                    *ngIf="updateUserForm.get('mobileNumber').touched  && !updateUserForm.get('mobileNumber').valid  ">
+                    <span *ngIf="updateUserForm.get('mobileNumber').errors['required']" class="text-danger">
+                        Required</span>
+                </span>
+            </div>
+
+            <h3>Relatives</h3>
+            <table class="table table-striped" formArrayName="relatives">
+                <thead>
+                    <tr>
+                        <th>Relation</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let relative of relatives.controls; let i= index">
+                    <tr [formGroupName]="i">
+                        <td>
+                            <h6>{{relative.value.relationship|titlecase}}</h6>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" formControlName="relationPersonName">
+                            <span class="help-block"
+                                *ngIf="relative.get?.('relationPersonName')?.touched  && !relative.get?.('relationPersonName')?.valid  ">
+                                <span *ngIf="relative.get?.('relationPersonName').errors!=null">
+                                    <span *ngIf="relative.get?.('relationPersonName')?.errors['required']"
+                                        class="text-danger">
+                                        Required</span>
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type=" button" class="btn btn-primary mt-3" type="submit">
+                <span class="text-center">Update User</span>
+            </button>
+        </form>
+    </div>
+</div>

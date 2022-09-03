@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+input {
+    width: 100%;
+    outline-width: 0px;
+    outline-style: none;
+    outline-color: none;
+}
+
+input:focus {
+    outline-width: 0px;
+    outline-style: none;
+    outline-color: none;
+}
+
+.form-group {
+    margin: 1rem;
+}

@@ -1,0 +1,32 @@
+<div class="d-flex align-items-center justify-content-center" style="height:100vh">
+
+    <div class="card">
+        <h5 class="card-title text-center alert alert-success"> Login</h5>
+        <div class="card-body">
+            {{message}}
+            <form [formGroup]="loginForm" (ngSubmit)='onSubmit()'>
+                <div class="form-group">
+                    <label for="">Username</label>
+                    <input type="text" class="form-control" formControlName="username">
+                    <span class="help-block"
+                        *ngIf="loginForm.get('username')?.touched  && !loginForm.get('username')?.valid  ">
+                        <span *ngIf="loginForm.get('username')?.errors?.['required']">Username is
+                            required</span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="">Password</label>
+                    <input type="password" class="form-control" formControlName="password">
+                    <span class="help-block"
+                        *ngIf="  loginForm.get('password')?.touched && !loginForm.get('password')?.valid  ">
+                        <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is
+                            required</span>
+                    </span>
+                </div>
+                <button type="button" class="btn btn-primary mt-3" type="submit">
+                    <span class="text-center">Login</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
