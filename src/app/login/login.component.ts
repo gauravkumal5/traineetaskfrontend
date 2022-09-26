@@ -33,7 +33,8 @@ export class LoginComponent implements OnInit {
     authObs = this.authService.login(this.loginForm.value.username, this.loginForm.value.password);
     authObs.subscribe(response => {
       if (response.jwtToken != undefined) {
-        localStorage.setItem('token', response.jwtToken);
+
+        sessionStorage.setItem('token', response.jwtToken);
         this.router.navigate(['customers']);
       }
     },

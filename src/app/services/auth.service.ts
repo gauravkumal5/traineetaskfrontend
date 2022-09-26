@@ -20,8 +20,10 @@ export class AuthService {
 
 
     logout() {
-        localStorage.clear();
+        sessionStorage.clear();
         this.isLoggedIn = false;
+
+
     }
 
     login(username?: string, password?: string) {
@@ -54,14 +56,15 @@ export class AuthService {
     }
 
     isAuthenticated() {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
+        console.log(token);
         if (token != undefined) {
             this.isLoggedIn = true;
         }
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve(this.isLoggedIn);
-            }, 1000);
+            }, 500);
         })
     }
 }

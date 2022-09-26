@@ -1,7 +1,7 @@
-import { Customer } from "./customer.model"
+import { CustomerList } from "./CustomerList.dto"
 
 export interface Page {
-    "content": Customer[],
+    "content": CustomerList[],
     "pageable": {
         "sort": {
             "empty": boolean,

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, map, Observable, of, startWith, Subscription } from 'rxjs';
 import { CustomerResponse } from '../models/customer-response';
 import { Page } from '../models/page';
+import { AuthService } from '../services/auth.service';
 import { CustomerService } from '../services/customer.service';
 import { IMessage, MessageService } from '../services/message.service';
 
@@ -29,7 +30,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
 
-  constructor(private customerService: CustomerService, private router: Router, private messageService: MessageService) {
+  constructor(private customerService: CustomerService, private router: Router, private messageService: MessageService, private authService: AuthService) {
 
   }
   ngOnDestroy(): void {
@@ -94,6 +95,20 @@ export class CustomersComponent implements OnInit, OnDestroy {
   onAddUser() {
     this.router.navigate(['/user/post']);
 
+  }
+  logout() {
+    this.authService.logout();
+    this.authService.isAuthenticated().then((data) => {
+
+      if (data) {
+        return true;
+      }
+      else {
+        this.router.navigate(['/login']);
+        return false;
+
+      }
+    });
   }
 
   onStatusChange(id: number, customerStatus: String) {

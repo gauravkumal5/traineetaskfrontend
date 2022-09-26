@@ -1,4 +1,5 @@
 import { Relative } from "./relative.model";
+import { UserLogin } from "./user-login.model";
 
 export interface Customer {
     id: number,
@@ -6,14 +7,17 @@ export interface Customer {
     citizenshipNo: string;
     dateOfBirth: any;
     emailAddress: string;
-    fullName: string;
     gender: string;
-    firstName: string;
-    lastName: string;
     maritalStatus: string;
-    middleName: string;
     mobileNumber: string;
     customerStatus: string;
-    relatives: Relative[]
+    adderName: string;
+    customerLastName: string;
+    customerMiddleName: string;
+    customerName: string;
+    modifierName: String;
+    relatives: Relative[],
+    userLoginRequest: UserLogin,
+    userLoginDetailResponse: UserLogin
 
 }

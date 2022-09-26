@@ -15,12 +15,12 @@ export class CustomerService {
     constructor(private http: HttpClient) { }
 
 
-    onCreateCustomer(customer?: Customer): Observable<Customer> {
+    onCreateCustomer(customer?: Customer) {
         console.log("hello");
         return this.http.post<Customer>(`${this.serverUrl}/customer/save`, customer).pipe(catchError(this.getErrorHandler));
     }
 
-    customer$ = (name: string = '', page: number = 0, size: number = 10): Observable<CustomerResponse<Page>> =>
+    customer$ = (name: string = '', page: number = 0, size: number = 2): Observable<CustomerResponse<Page>> =>
         this.http.get<any>(`${this.serverUrl}/customer/getCustomers?name=${name}&page=${page}&size=${size}`);
 
 
@@ -28,7 +28,7 @@ export class CustomerService {
         return this.http.post<Customer>(`${this.serverUrl}/customer/update`, updateData).pipe(catchError(this.getErrorHandler));
     }
 
-    getCustomer(id: number) {
+    getCustomer(id: number): Observable<Customer> {
         console.log(id);
         return this.http.get<Customer>(`${this.serverUrl}/customer/get`, {
             params: {
@@ -57,7 +57,7 @@ export class CustomerService {
             return throwError(errorResponse.error.violations);
         }
         console.log(errorResponse.error);
-        return throwError(errorResponse.error.error);
+        return throwError(errorResponse.error);
     }
 }
 

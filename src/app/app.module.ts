@@ -15,6 +15,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AppRoutingModule } from './app-routing.model';
 import { AuthInterceptorService } from './services/auth.interceptor';
 import { CustomersComponent } from './customers/customers.component';
+import { DeactivateGuardService } from './services/guards/deactivate-guard.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { CustomersComponent } from './customers/customers.component';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
-
+    DeactivateGuardService,
   ],
   bootstrap: [AppComponent]
 })

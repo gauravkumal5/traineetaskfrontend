@@ -7,14 +7,15 @@ import { EditUserComponent } from "./edit-user/edit-user.component";
 import { LoginComponent } from "./login/login.component";
 import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
 import { AuthGuardService } from "./services/guards/auth-guard.services";
+import { DeactivateGuardService } from "./services/guards/deactivate-guard.service";
 
 const appRoutes: Routes = [
 
     { path: '', component: AppComponent, canActivate: [AuthGuardService] },
     { path: 'login', component: LoginComponent },
     { path: 'customers', component: CustomersComponent, canActivate: [AuthGuardService] },
-    { path: 'user/post', component: AddUserComponent, canActivate: [AuthGuardService] },
-    { path: 'user/update', component: EditUserComponent, canActivate: [AuthGuardService] },
+    { path: 'user/post', component: AddUserComponent, canActivate: [AuthGuardService], canDeactivate: [DeactivateGuardService] },
+    { path: 'user/update', component: EditUserComponent, canActivate: [AuthGuardService], canDeactivate: [DeactivateGuardService] },
     { path: 'not-found', component: PageNotFoundComponent, },
     { path: '**', redirectTo: 'not-found' }
 

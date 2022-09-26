@@ -1,7 +1,7 @@
 <ng-container *ngIf="(usersState$|async) as state" [ngSwitch]="state.appState">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse mr-3" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <button class="btn btn-primary" (click)="onAddUser()"> Add</button>
                 </ul>
@@ -10,12 +10,14 @@
                         formControlName="name">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
+                <button class="btn btn-outline-success ml-3" type="submit" (click)="logout()">Logout</button>
+
             </div>
         </div>
     </nav>
     <div class="container">
         <ng-container *ngSwitchCase="'APP_ERROR'">
-            {{state.error|json}}
+            <!-- {{state.error|json}} -->
         </ng-container>
         <ng-container *ngSwitchCase="'APP_LOADING'">
             <div class="d-flex justify-content-center mt-4">
@@ -25,10 +27,11 @@
             </div>
         </ng-container>
         <div class="row" *ngSwitchCase="'APP_LOADED'">
-            {{isDeleted}}
+                {{isDeleted}}
             {{isStatusChanged}}
             {{messages.length>0? messages[0].text: ''}} <div class="com-md-12 mt-3">
-                <table class="table table-striped">
+                <h4 style="text-align: center;"> Users</h4>
+                <table class="table table-striped" style="font-size:smaller;">
                     <thead>
                         <tr>
                             <th scope="col">Full Name</th>
@@ -39,20 +42,31 @@
                             <th scope="col">Marital Status</th>
                             <th scope="col">Email Address</th>
                             <th scope="col">Mobile Number</th>
+                            <th scope="col">Added By</th>
+                            <th scope="col">Modified By</th>
                             <th scope="col">Action</th>
 
                         </tr>
                     </thead>
+<!-- [ngClass]="i==($currentPage|async)?'active':'' "> -->
+
                     <tbody>
                         <tr *ngFor="let user of state.appData.data.page.content; let i=index">
-                            <td>{{user.fullName}}</td>
-                            <td>{{user.gender}}</td>
+                            <td>{{user.firstName | titlecase}} {{ user.middleName | titlecase}} {{user.lastName | titlecase}}
+                            </td>
+                            <td>{{user.gender | titlecase}}</td>
                             <td>{{user.dateOfBirth|date}}</td>
-                            <td>{{user.customerStatus}}</td>
-                            <td>{{user.address}}</td>
-                            <td>{{user.maritalStatus}}</td>
+                            <td> <span [ngClass]="user.status== 'active'? 'bg-success':'bg-danger'" class=" p-2 text-white "> {{user.status |
+                                    titlecase}}</span>
+                            </td>
+                            <td>{{user.address | titlecase}}</td>
+                            <td>{{user.maritalStatus | titlecase}}</td>
                             <td>{{user.emailAddress}}</td>
                             <td>{{user.mobileNumber}}</td>
+                            <td>{{user.adderFirstName | titlecase}} {{ user.adderMiddleName | titlecase}} {{user.adderLastName | titlecase}}
+                            <td>{{user.modifierFirstName | titlecase}} {{ user.modifierMiddleName | titlecase}} {{user.modifierLastName |
+                                titlecase}}
+
                             <td>
                                 <button type=" button" class="btn btn-sm" data-bs-toggle="tooltip"
                                     data-bs-placement="right" title="Edit" (click)="onUpdateUser(user.id)">
@@ -65,7 +79,7 @@
                                     </svg>
                                 </button>
                                 <button type="button" classdata-bs-toggle="tooltip" data-bs-placement="top" title="Lock"
-                                    data-bs-toggle="tooltip" (click)="onStatusChange(user.id,user.customerStatus)">
+                                    data-bs-toggle="tooltip" (click)="onStatusChange(user.id,user.status)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-file-lock" viewBox="0 0 16 16">
                                         <path
@@ -76,7 +90,7 @@
                                 </button>
                                 <button type="button" class="btn btn-sm " data-bs-toggle="tooltip"
                                     data-bs-placement="top" title="Delete"
-                                    (click)="onDeleteUser(user.id,user.customerStatus)">
+                                    (click)="onDeleteUser(user.id,user.status)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-archive" viewBox="0 0 16 16">
                                         <path

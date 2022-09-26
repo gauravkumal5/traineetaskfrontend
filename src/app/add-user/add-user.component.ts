@@ -1,9 +1,12 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupName, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Customer } from '../models/customer.model';
 import { CustomerService } from '../services/customer.service';
 import { MessageService } from '../services/message.service';
+import { Moment } from 'moment';
+import * as moment from 'moment';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-add-user',
@@ -15,41 +18,51 @@ export class AddUserComponent implements OnInit {
   addUserForm!: FormGroup;
   isValidForm: boolean = true;
   isDiabledSpouse: boolean = true;
+  isEmailUnique: boolean = true;
+  isCitizenshipUnique: boolean = true;
+  birthdayLimitDate: any;
+  isSubmit: boolean = false;
 
-  constructor(private fb: FormBuilder, private customerService: CustomerService, private router: Router, private messageService: MessageService) {
+
+  constructor(private fb: FormBuilder, private customerService: CustomerService, private router: Router, private messageService: MessageService, private authService: AuthService) {
   }
 
   ngOnInit(): void {
+    this.birthdayLimitDate = new Date().setFullYear(new Date().getFullYear() - 5);
     this.addUserForm = this.fb.group({
-      firstName: ["gaurav", [Validators.required, Validators.minLength(3), Validators.maxLength(20), Validators.pattern((/^[A-Za-z]+$/))]],
+      firstName: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(20), Validators.pattern((/^[A-Za-z]+$/))]],
       middleName: [""],
-      lastName: ["kumal", [Validators.required, Validators.minLength(3), Validators.maxLength(20), Validators.pattern((/^[A-Za-z]+$/))]],
+      lastName: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(20), Validators.pattern((/^[A-Za-z]+$/))]],
       dateOfBirth: [null, [Validators.required]],
-      status: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-      gender: ["male", [Validators.required]],
-      citizenshipNo: [null, [Validators.required, Validators.pattern((/^[0-9-]*$/))]],
-      address: ["lazimpat", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-      maritalStatus: [null, [Validators.required]],
-      emailAddress: ["g@gmail.com", [Validators.required, Validators.email]],
+      status: ["active", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      gender: ["", [Validators.required]],
+      citizenshipNo: [223423, [Validators.required, Validators.pattern((/^[0-9-]*$/))]],
+      address: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      maritalStatus: ["", [Validators.required, Validators.minLength(3)]],
+      emailAddress: ["", [Validators.required, Validators.email]],
       mobileNumber: ["9803937469", [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+      userLoginRequest: this.fb.group({
+        username: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+        password: ["pass@123", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
+      }),
       relatives: this.fb.array([
         this.fb.group({
-          relationPersonName: ["dhan", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+          relationPersonName: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
           relationship: ["father", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
         }),
         this.fb.group({
-          relationPersonName: ["gita", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+          relationPersonName: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
           relationship: ["mother", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
         }),
         this.fb.group({
-          relationPersonName: ["ran", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+          relationPersonName: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
           relationship: ["grandfather", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
         }),
         this.fb.group({
           relationPersonName: [{ value: '', disabled: this.isDiabledSpouse }, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
           relationship: [{ value: 'spouse', disabled: this.isDiabledSpouse }, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
         }),
-      ])
+      ]),
     })
 
     this.addUserForm.get('maritalStatus')?.valueChanges.subscribe(changes => {
@@ -94,19 +107,57 @@ export class AddUserComponent implements OnInit {
       console.log(this.addUserForm);
       return;
     }
-
-    console.log(this.addUserForm);
     const postData: Customer = this.addUserForm.value;
     console.log(postData);
     this.customerService.onCreateCustomer(postData).subscribe((response) => {
       console.log(response);
       let message = "Customer Added successfully";
       this.messageService.sendMessage({ text: message, category: 'success' });
+      this.isSubmit = true;
       this.router.navigate(["customers"]);
     },
       (error) => {
-        console.log(error);
+
+        if (error.message === "Citizenship") {
+          this.isEmailUnique = true;
+          this.isCitizenshipUnique = false;
+        }
+        if (error.message === "Email") {
+          this.isCitizenshipUnique = true;
+          this.isEmailUnique = false;
+        }
       })
 
   }
+  logout() {
+    this.authService.logout();
+    this.authService.isAuthenticated().then((data) => {
+
+      if (data) {
+        return true;
+      }
+      else {
+        this.router.navigate(['/login']);
+        return false;
+
+      }
+    });
+  }
+  canExit() {
+
+    if (!this.addUserForm.dirty) {
+      return true;
+    }
+    else if (this.isSubmit) {
+      return true;
+    }
+    else {
+      if (window.confirm("All the changes will be lost. Ar you sure you wnat to continue?")) {
+        return true;
+      }
+    }
+    return false;
+
+  }
+
 }

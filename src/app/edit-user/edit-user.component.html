@@ -1,6 +1,18 @@
 <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <div class="collapse navbar-collapse mr-3" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <a routerLink="/customers" class="link-primary"> Home</a>
+                </ul>
+    
+                <button class="btn btn-outline-success ml-3" type="submit" (click)="logout()">Logout</button>
+    
+            </div>
+        </div>
+    </nav>
     <h4 class="text-success text-center">Edit Customer</h4>
-    <h3>{{isValidForm?'':'Form is invalid'}}</h3>
+    {{erroMesssage}}
     <div class="d-flex  justify-content-center" style="height:100vh">
         <form [formGroup]="updateUserForm" (ngSubmit)='onUpdateUser()' style="width: 100%;" class="add-user-form">
             <div class="form-group">
@@ -148,6 +160,8 @@
                     *ngIf="updateUserForm.get('mobileNumber').touched  && !updateUserForm.get('mobileNumber').valid  ">
                     <span *ngIf="updateUserForm.get('mobileNumber').errors['required']" class="text-danger">
                         Required</span>
+                        <span *ngIf="updateUserForm.get('mobileNumber').errors['minlength']" class="text-danger">
+                            Must be 10 digits</span>
                 </span>
             </div>
 
@@ -178,7 +192,7 @@
                     </tr>
                 </tbody>
             </table>
-            <button type=" button" class="btn btn-primary mt-3" type="submit">
+    <button type=" button" class="btn btn-primary mt-3" type="submit">
                 <span class="text-center">Update User</span>
             </button>
         </form>
